@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>我的校招岗位表</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero" id="hero">
+    <h1 id="title">正在加载…</h1>
+    <div class="meta" id="meta"></div>
+    <div class="valid" id="valid"></div>
+    <div class="profile" id="profile"></div>
+  </header>
+
+  <section class="stats" id="stats" hidden>
+    <div class="stat s1"><b id="c1">0</b><span>专业对口</span></div>
+    <div class="stat s2"><b id="c2">0</b><span>专业相关</span></div>
+    <div class="stat"><b id="c3">0</b><span>专业待核实</span></div>
+    <div class="stat"><b id="c4">0</b><span>合计</span></div>
+    <div class="stat s3"><b id="c5">0</b><span>需笔试</span></div>
+  </section>
+
+  <div class="toolbar" id="toolbar" hidden>
+    <input type="search" id="kw" placeholder="搜公司 / 岗位 / 城市">
+    <select id="city"><option value="">全部城市</option></select>
+    <select id="ind" aria-label="按行业筛选">
+      <option value="">全部行业</option>
+    </select>
+    <select id="nat" aria-label="按企业性质筛选">
+      <option value="">全部性质</option>
+      <option value="国企">国企 / 事业单位</option>
+      <option value="银行">银行</option>
+      <option value="外企">外企</option>
+      <option value="民企">民企</option>
+      <option value="合资">合资</option>
+    </select>
+    <select id="fit" aria-label="按专业匹配程度筛选">
+      <option value="">全部岗位</option>
+      <option value="字面">只看对口岗位</option>
+      <option value="类别">专业相关岗位</option>
+      <option value="不限">专业待核实岗位</option>
+    </select>
+    <button id="hideDone" type="button">隐藏已投递</button>
+    <button id="noPen" type="button">只看无需笔试</button>
+  </div>
+
+  <main class="list" id="list"></main>
+
+  <footer class="note">
+    <p>本页仅供本人查阅，请勿转发链接。</p>
+    <p>岗位信息来自公开校招公告，投递前请以企业官方公告为准。</p>
+    <p id="foot"></p>
+  </footer>
+
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

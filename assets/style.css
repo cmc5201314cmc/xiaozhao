@@ -1,0 +1,245 @@
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --line: #e6e8ec;
+  --text: #1f2329;
+  --sub: #646a73;
+  --hint: #8f959e;
+  --brand: #185fa5;
+  --brand-soft: #e8f1fa;
+  --ok: #0f6e56;
+  --ok-soft: #e3f5ee;
+  --warn: #a15c00;
+  --warn-soft: #fdf3e3;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+/* .stats / .toolbar 用了 display:flex，会盖掉 hidden 属性；这里补回来 */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 16px 14px 48px; }
+
+/* ---------- 顶部 ---------- */
+.hero {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.hero h1 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+.hero .meta { color: var(--sub); font-size: 13px; }
+/* 有效期：呈现订单的「更新至 X」；到期后变灰显示「已停止更新」 */
+.valid {
+  margin-top: 10px; display: flex; align-items: center;
+  gap: 8px; flex-wrap: wrap;
+}
+.valid .vtag {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: 999px;
+  background: var(--ok-soft); color: var(--ok);
+  font-size: 12.5px; font-weight: 500; white-space: nowrap;
+}
+.valid .vtag.frozen { background: #f1f2f4; color: var(--hint); }
+.valid .vtip { font-size: 12.5px; color: var(--sub); }
+/* 链接失效日期：用弱化色，与「更新至」拉开层次，不抢主信息 */
+.valid .vtip.expire {
+  color: var(--hint); font-size: 12px;
+  padding-left: 8px; border-left: 1px solid var(--line);
+}
+.profile {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.chip {
+  background: var(--brand-soft); color: var(--brand);
+  border-radius: 6px; padding: 3px 8px; font-size: 12.5px;
+}
+
+/* ---------- 统计 ---------- */
+.stats { display: flex; gap: 8px; margin-bottom: 12px; }
+.stat {
+  flex: 1; background: var(--card); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 8px; text-align: center;
+}
+.stat b { display: block; font-size: 19px; font-weight: 600; }
+.stat span { color: var(--hint); font-size: 12px; }
+.stat.s1 b { color: var(--ok); }
+.stat.s2 b { color: var(--brand); }
+/* 「需笔试」是警示信息，用醒目但不刺眼的橙色 */
+.stat.s3 { background: var(--warn-soft); border-color: #f0dcc0; }
+.stat.s3 b { color: var(--warn); }
+
+/* ---------- 工具条 ---------- */
+.toolbar {
+  position: sticky; top: 0; z-index: 9;
+  background: var(--bg); padding: 8px 0;
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.toolbar input[type="search"] {
+  flex: 1 1 200px; min-width: 0;
+  padding: 9px 12px; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--card);
+  font-size: 14px; color: var(--text); outline: none;
+}
+.toolbar input[type="search"]:focus { border-color: var(--brand); }
+.toolbar select, .toolbar button {
+  padding: 9px 12px; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--card);
+  font-size: 13.5px; color: var(--text); cursor: pointer;
+}
+.toolbar button.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+/* 筛选器多了（城市/行业/性质/专业/笔试），手机上会换行成两排。
+   让 4 个下拉在窄屏平分宽度、按钮不被挤掉，保持一行或紧凑两行。 */
+@media (max-width: 560px) {
+  .toolbar select { flex: 1 1 44%; min-width: 0; padding: 8px 8px; font-size: 13px; }
+  .toolbar button { flex: 1 1 44%; padding: 8px 6px; font-size: 13px; }
+  .toolbar input[type="search"] { flex: 1 1 100%; }
+}
+
+/* ---------- 岗位卡片 ---------- */
+.list { display: flex; flex-direction: column; gap: 10px; }
+.job {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 13px 14px;
+}
+.job .top { display: flex; align-items: flex-start; gap: 8px; }
+.job .co { font-weight: 600; font-size: 15px; flex: 1; word-break: break-all; }
+.job .role { color: var(--text); margin-top: 5px; word-break: break-all; }
+.job .rows {
+  margin-top: 8px; display: flex; flex-wrap: wrap;
+  gap: 4px 10px; color: var(--sub); font-size: 12.5px;
+}
+.job .rows i { font-style: normal; color: var(--hint); }
+.job .foot {
+  margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.deadline { font-size: 12.5px; color: var(--warn); }
+.deadline.hot { font-weight: 600; }
+
+/* 岗位更新日期：放在「标记已投递」后面，次要样式不抢按钮的视觉重量 */
+.upd {
+  font-size: 12px; color: var(--hint); white-space: nowrap;
+  padding: 5px 8px; border-radius: 7px; background: var(--bg);
+}
+
+/* 岗位方向标签：源表把几十个方向挤在一格里，拆成标签才看得清 */
+.roles {
+  margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+}
+.roles-rest {
+  flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 5px;
+  margin-top: 5px; padding-top: 6px; border-top: 1px dashed var(--line);
+}
+.rt {
+  font-size: 12px; line-height: 1.5; padding: 3px 9px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--card); color: var(--sub); cursor: pointer;
+  white-space: nowrap;
+}
+.rt:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+.rt.more {
+  background: transparent; border-style: dashed;
+  color: var(--brand); border-color: var(--brand);
+}
+.rt.more:hover { background: var(--brand-soft); }
+
+/* 笔试：源表 34% 明确标「有笔试」，学生最关心投完要不要笔试 */
+.pen {
+  font-size: 11px; font-weight: 500; padding: 1px 6px; border-radius: 5px;
+  background: var(--warn-soft); color: var(--warn);
+  margin-left: 6px; white-space: nowrap; vertical-align: 2px;
+}
+.pen.unk { background: var(--bg); color: var(--hint); font-weight: 400; }
+
+/* 「该公司共 N 个岗位」：源表一家公司常占多行，提示客户别以为只有这一个 */
+.multi {
+  font-size: 11px; font-style: normal; color: var(--brand);
+  background: var(--brand-soft); padding: 1px 6px;
+  border-radius: 5px; margin-left: 6px; white-space: nowrap;
+}
+
+/* 「已投递 / 未投递」按钮：记录只存在浏览者本机 */
+.mark {
+  padding: 6px 12px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--card);
+  color: var(--sub); font-size: 13px; white-space: nowrap;
+}
+.mark:hover { border-color: var(--brand); color: var(--brand); }
+.mark.on {
+  background: var(--ok-soft); border-color: var(--ok-soft);
+  color: var(--ok); font-weight: 600;
+}
+/* 已投递的整张卡片压暗，方便快速扫过 */
+.job.done { background: #fafbfc; }
+.job.done .co, .job.done .role { color: var(--hint); }
+.tag {
+  font-size: 11.5px; padding: 2px 7px; border-radius: 5px;
+  white-space: nowrap; flex: none;
+}
+.tag.k1 { background: var(--ok-soft); color: var(--ok); }
+.tag.k2 { background: var(--brand-soft); color: var(--brand); }
+.tag.k3 { background: #f1f2f4; color: var(--hint); }
+/* 岗位地点含「全国多地」时的标记 */
+.job .rows em.nat {
+  font-style: normal; margin-left: 6px; padding: 1px 6px; border-radius: 4px;
+  background: var(--warn-soft); color: var(--warn); font-size: 11px;
+  white-space: nowrap;
+}
+.apply {
+  margin-left: auto; background: var(--brand); color: #fff;
+  text-decoration: none; padding: 7px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.apply.off { background: #d9dce0; color: #fff; pointer-events: none; }
+.more {
+  display: block; width: 100%; margin-top: 14px; padding: 12px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 10px; color: var(--brand); font-size: 14px; cursor: pointer;
+}
+.empty {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 40px 20px; text-align: center; color: var(--hint);
+}
+
+/* ---------- 0 命中的专属空态 ---------- */.empty.zero { padding: 34px 18px; text-align: center; color: var(--sub); }
+.empty.zero .zt {
+  font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px;
+}
+.empty.zero .zbig {
+  margin: 0 0 14px; font-size: 20px; font-weight: 700; color: var(--brand);
+  letter-spacing: 1px;
+}
+.empty.zero .ztip {
+  margin: 0; padding-top: 12px; border-top: 1px dashed var(--line);
+  font-size: 12.5px; color: var(--hint); line-height: 1.7;
+}
+.note {
+  margin-top: 20px; padding: 14px; background: var(--card);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  color: var(--hint); font-size: 12.5px;
+}
+.note p { margin: 0 0 6px; }
+.note p:last-child { margin-bottom: 0; }
+
+@media (max-width: 420px) {
+  .hero h1 { font-size: 17px; }
+  .stat b { font-size: 17px; }
+}
