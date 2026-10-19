@@ -72,13 +72,16 @@ html, body {
 }
 
 /* ---------- 统计 ---------- */
-.stats { display: flex; gap: 8px; margin-bottom: 12px; }
+/* 5 个统计格（第 5 格「需笔试」是 2026-10-16 新加的）在手机宽度一行放不下，
+   会撑出横向滚动、右边被截断。窄屏改成 3 列网格，自然折成 3+2 两行。 */
+.stats { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 .stat {
-  flex: 1; background: var(--card); border: 1px solid var(--line);
+  flex: 1 1 0; min-width: 0;
+  background: var(--card); border: 1px solid var(--line);
   border-radius: 10px; padding: 10px 8px; text-align: center;
 }
 .stat b { display: block; font-size: 19px; font-weight: 600; }
-.stat span { color: var(--hint); font-size: 12px; }
+.stat span { color: var(--hint); font-size: 12px; white-space: nowrap; }
 .stat.s1 b { color: var(--ok); }
 .stat.s2 b { color: var(--brand); }
 /* 「需笔试」是警示信息，用醒目但不刺眼的橙色 */
@@ -111,6 +114,11 @@ html, body {
   .toolbar select { flex: 1 1 44%; min-width: 0; padding: 8px 8px; font-size: 13px; }
   .toolbar button { flex: 1 1 44%; padding: 8px 6px; font-size: 13px; }
   .toolbar input[type="search"] { flex: 1 1 100%; }
+  /* 5 个统计格挤不进一行：固定 3 列，折成 3+2，避免横向滚动 */
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .stat { padding: 8px 4px; }
+  .stat b { font-size: 17px; }
+  .stat span { font-size: 11px; }
 }
 
 /* ---------- 岗位卡片 ---------- */

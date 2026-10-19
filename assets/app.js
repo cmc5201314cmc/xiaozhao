@@ -61,16 +61,14 @@ var ROLE_SHOW = 12;      // 岗位方向默认显示几个，其余折叠
     }).catch(function () { /* 失败也不打扰，下次打开会再拉一次 */ });
   }
 
-  // 订单号既可能是 /2026001（域名根），也可能是 /仓库名/2026001（Gitee 子路径）。
-// Gitee Pages 会把仓库名变成一级路径，所以这里取**最后一段**。
-var ORDER_RE = /^\/(?:[A-Za-z0-9\-_%]+\/)*([A-Za-z0-9\-_%]{2,64})\/?$/;
+  var ORDER_RE = /^\/([A-Za-z0-9\-_%]{2,64})\/?$/;
 
   function pickOrderId() {
     var q = new URLSearchParams(location.search);
     var v = q.get("o") || q.get("order") || q.get("id");
     if (v) return v.trim();
     var m = ORDER_RE.exec(location.pathname);
-    if (m && m[1] !== "order.html" && m[1] !== "index.html") return decodeURIComponent(m[1]);
+    if (m && m[1] !== "order.html") return decodeURIComponent(m[1]);
     return "";
   }
 
