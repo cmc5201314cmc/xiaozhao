@@ -61,14 +61,23 @@ var ROLE_SHOW = 12;      // 岗位方向默认显示几个，其余折叠
     }).catch(function () { /* 失败也不打扰，下次打开会再拉一次 */ });
   }
 
-  var ORDER_RE = /^\/([A-Za-z0-9\-_%]{2,64})\/?$/;
+  // 订单号可能出现在两种路径下：
+//   GitHub Pages:  /xiaozhao/ssdf345dcd-fd-2134   （仓库名是一级路径）
+//   根路径部署:     /ssdf345dcd-fd-2134
+// 所以取**最后一段**作为订单号，前面的路径段全部跳过。
+var ORDER_RE = /^\/(?:[A-Za-z0-9\-_%]+\/)*([A-Za-z0-9\-_%]{2,64})\/?$/;
+// 这些"看起来像订单号"的段不能当订单号：页面文件名、以及仓库名本身
+// （仓库名是 GitHub Pages 的一级路径，访问 /xiaozhao/ 是首页，不是订单）
+var NOT_ORDER = { "order.html": 1, "index.html": 1, "xiaozhao": 1 };
 
   function pickOrderId() {
     var q = new URLSearchParams(location.search);
     var v = q.get("o") || q.get("order") || q.get("id");
     if (v) return v.trim();
     var m = ORDER_RE.exec(location.pathname);
-    if (m && m[1] !== "order.html") return decodeURIComponent(m[1]);
+    if (m && !NOT_ORDER[m[1]]) {
+      return decodeURIComponent(m[1]);
+    }
     return "";
   }
 
