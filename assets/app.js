@@ -399,17 +399,11 @@ var NOT_ORDER = { "order.html": 1, "index.html": 1, "xiaozhao": 1 };
       var expire = data.link_expire || "";
       var vh;
       if (data.frozen) {
-        vh = '<span class="vtag frozen">已停止更新</span>' +
-          '<span class="vtip">本表更新至 ' + esc(until || "—") + "，之后内容不再变化</span>";
-      } else if (until) {
-        vh = '<span class="vtag">每日更新</span>' +
-          '<span class="vtip">更新至 ' + esc(until) + "</span>";
+        vh = '<div><span>状态</span><b>已停止更新</b></div>' +
+          '<div><span>本表更新至</span><b>' + esc(until || "—") + '</b></div>';
       } else {
-        vh = '<span class="vtag">每日更新</span>' +
-          '<span class="vtip">链接不变，内容每天刷新</span>';
-      }
-      if (expire) {
-        vh += '<span class="vtip expire">链接失效日期 ' + esc(expire) + "</span>";
+        vh = '<div><span>每日更新 · 更新至</span><b>' + esc(until || "持续更新") + '</b></div>' +
+          '<div><span>链接失效日期</span><b>' + (expire ? esc(expire) : "长期有效") + '</b></div>';
       }
       document.getElementById("valid").innerHTML = vh;
 
@@ -422,11 +416,52 @@ var NOT_ORDER = { "order.html": 1, "index.html": 1, "xiaozhao": 1 };
           }).join("");
 
       var c = data.counts || {};
-      document.getElementById("c1").textContent = c["对口"] || 0;
-      document.getElementById("c2").textContent = c["相关"] || 0;
-      document.getElementById("c3").textContent = c["不限专业"] || 0;
-      document.getElementById("c4").textContent = data.total || all.length;
-      document.getElementById("c5").textContent = (c["需笔试"] != null) ? c["需笔试"] : 0;
+      var vKd = c["对口"] || 0;          // 专业对口
+      var vXg = c["相关"] || 0;          // 专业相关
+      var vDs = c["不限专业"] || 0;      // 专业待核实
+      var vTotal = data.total || all.length || 0;
+      var vExam = (c["需笔试"] != null) ? c["需笔试"] : 0;
+      var vNoExam = Math.max(0, vTotal - vExam);   // 无需笔试 = 总数 - 需笔试
+
+      function setTxt(id, v) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = v;
+      }
+      setTxt("c1", vKd);       // 环形中心
+      setTxt("c1b", vKd);      // 标题里的「N 条」
+      setTxt("c1c", vKd);      // 图例·专业对口
+      setTxt("c2", vXg);       // 图例·专业相关
+      setTxt("c3", vDs);       // 图例·待核实
+      setTxt("c4", vTotal);    // 全部岗位
+      setTxt("c5", vExam);     // 需笔试
+      setTxt("c6", vNoExam);   // 无需笔试
+      // 本次新增：岗位池里「今天新进」的、且命中这单的条数
+      var vNew = (data.new_count != null) ? data.new_count : 0;
+      setTxt("c7", vNew);
+      var mNew = document.getElementById("c7");
+      if (mNew && mNew.parentNode) {
+        // 新增为 0 时整格弱化，避免「0」反而抢眼
+        if (vNew > 0) { mNew.parentNode.classList.add("has-new"); }
+        else { mNew.parentNode.style.opacity = ".55"; }
+      }
+      setTxt("ctaNum", vKd);   // 主按钮里的数字
+
+      // 环形占比：按真实比例画，不美化
+      var ring = document.getElementById("ring");
+      if (ring && vTotal > 0) {
+        var d1 = (vKd / vTotal) * 360;
+        var d2 = ((vKd + vXg) / vTotal) * 360;
+        ring.style.background =
+          "conic-gradient(#A3E635 0deg " + d1.toFixed(1) + "deg, " +
+          "#5CE1E6 " + d1.toFixed(1) + "deg " + d2.toFixed(1) + "deg, " +
+          "rgba(255,255,255,.14) " + d2.toFixed(1) + "deg 360deg)";
+      }
+      // 没有对口岗位时，主按钮禁用（避免点了没结果）
+      var ctaEl = document.getElementById("ctaFit");
+      if (ctaEl) {
+        ctaEl.disabled = (vKd === 0);
+        ctaEl.style.display = (vKd === 0) ? "none" : "flex";
+      }
 
       // 资料不全（学历/届次/专业 漏填）：优先提示补资料，别让客户以为「没有岗位」
       if (data.incomplete && data.incomplete.length) {
@@ -445,6 +480,8 @@ var NOT_ORDER = { "order.html": 1, "index.html": 1, "xiaozhao": 1 };
       }
 
       document.getElementById("stats").hidden = false;
+      var mEl = document.getElementById("metrics");
+      if (mEl) mEl.hidden = false;
       document.getElementById("toolbar").hidden = false;
       document.getElementById("foot").textContent =
         "本页由客服为你生成，数据每天更新，链接不变。";
@@ -481,6 +518,23 @@ var NOT_ORDER = { "order.html": 1, "index.html": 1, "xiaozhao": 1 };
         autoStop = false;
         refresh();
       });
+
+      // 主按钮「看我该投的 N 条」：等价于把筛选切到「只看对口」并跳回列表顶部。
+      // 走的是同一个 fit 下拉，所以不会绕开任何既有筛选逻辑。
+      var ctaBtn = document.getElementById("ctaFit");
+      if (ctaBtn) {
+        ctaBtn.addEventListener("click", function () {
+          var fitSel = document.getElementById("fit");
+          if (!fitSel) return;
+          fitSel.value = "字面";
+          autoStop = false;
+          refresh();
+          var listEl = document.getElementById("list");
+          if (listEl) {
+            window.scrollTo({ top: listEl.offsetTop - 70, behavior: "smooth" });
+          }
+        });
+      }
       document.getElementById("list").addEventListener("click", function (e) {
         var t = e.target;
         // 点方向标签 -> 按该方向搜索（客户想快速看"这家公司的算法岗还有哪些"）

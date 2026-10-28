@@ -8,55 +8,86 @@
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<div class="wrap">
+<div class="phone">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
 
-  <header class="hero" id="hero">
+  <div class="wrap">
+
+    <!-- ═══ 头部 ═══ -->
+    <div class="kicker"><i></i>DAILY UPDATE</div>
     <h1 id="title">正在加载…</h1>
-    <div class="meta" id="meta"></div>
-    <div class="valid" id="valid"></div>
+    <div class="oid" id="meta"></div>
+    <div class="dates" id="valid"></div>
     <div class="profile" id="profile"></div>
-  </header>
 
-  <section class="stats" id="stats" hidden>
-    <div class="stat s1"><b id="c1">0</b><span>专业对口</span></div>
-    <div class="stat s2"><b id="c2">0</b><span>专业相关</span></div>
-    <div class="stat"><b id="c3">0</b><span>专业待核实</span></div>
-    <div class="stat"><b id="c4">0</b><span>合计</span></div>
-    <div class="stat s3"><b id="c5">0</b><span>需笔试</span></div>
-  </section>
+    <!-- ═══ 核心：环形占比 + 主行动 ═══ -->
+    <section class="core" id="stats" hidden>
+      <div class="core-top">
+        <div class="ring" id="ring">
+          <div class="mid"><b id="c1">0</b><span>值得投</span></div>
+        </div>
+        <div class="core-txt">
+          <h2>按你的专业和意向，<br><em><span id="c1b">0</span> 条</em>高度匹配</h2>
+          <div class="lg">
+            <div class="lgi"><i class="k1"></i>专业对口<b id="c1c">0</b></div>
+            <div class="lgi"><i class="k2"></i>专业相关<b id="c2">0</b></div>
+            <div class="lgi"><i class="k3"></i>待核实<b id="c3">0</b></div>
+          </div>
+        </div>
+      </div>
+      <button class="cta" id="ctaFit" type="button">
+        看我该投的 <span id="ctaNum">0</span> 条
+        <span class="arw"></span>
+      </button>
+      <div class="cta-sub">已按匹配度排好，从上往下投就行</div>
+    </section>
 
-  <div class="toolbar" id="toolbar" hidden>
-    <input type="search" id="kw" placeholder="搜公司 / 岗位 / 城市">
-    <select id="city"><option value="">全部城市</option></select>
-    <select id="ind" aria-label="按行业筛选">
-      <option value="">全部行业</option>
-    </select>
-    <select id="nat" aria-label="按企业性质筛选">
-      <option value="">全部性质</option>
-      <option value="国企">国企 / 事业单位</option>
-      <option value="银行">银行</option>
-      <option value="外企">外企</option>
-      <option value="民企">民企</option>
-      <option value="合资">合资</option>
-    </select>
-    <select id="fit" aria-label="按专业匹配程度筛选">
-      <option value="">全部岗位</option>
-      <option value="字面">只看对口岗位</option>
-      <option value="类别">专业相关岗位</option>
-      <option value="不限">专业待核实岗位</option>
-    </select>
-    <button id="hideDone" type="button">隐藏已投递</button>
-    <button id="noPen" type="button">只看无需笔试</button>
+    <!-- ═══ 次要指标 ═══ -->
+    <div class="metrics" id="metrics" hidden>
+      <div class="m"><div class="k">全部岗位</div><div class="v" id="c4">0</div></div>
+      <div class="m warn"><div class="k">需笔试</div><div class="v" id="c5">0</div></div>
+      <div class="m"><div class="k">无需笔试</div><div class="v" id="c6">0</div></div>
+      <div class="m new"><div class="k">本次新增</div><div class="v" id="c7">0</div></div>
+    </div>
+
+    <!-- ═══ 筛选 ═══ -->
+    <div class="filters" id="toolbar" hidden>
+      <input type="search" id="kw" placeholder="搜公司 / 岗位 / 城市">
+      <select id="city"><option value="">全部城市</option></select>
+      <select id="ind" aria-label="按行业筛选">
+        <option value="">全部行业</option>
+      </select>
+      <select id="nat" aria-label="按企业性质筛选">
+        <option value="">全部性质</option>
+        <option value="国企">国企 / 事业单位</option>
+        <option value="银行">银行</option>
+        <option value="外企">外企</option>
+        <option value="民企">民企</option>
+        <option value="合资">合资</option>
+      </select>
+      <select id="fit" aria-label="按专业匹配程度筛选">
+        <option value="">全部岗位</option>
+        <option value="字面">只看对口岗位</option>
+        <option value="类别">专业相关岗位</option>
+        <option value="不限">专业待核实岗位</option>
+      </select>
+      <div class="btns">
+        <button id="hideDone" type="button">隐藏已投递</button>
+        <button id="noPen" type="button">只看无需笔试</button>
+      </div>
+    </div>
+
+    <main class="list" id="list"></main>
+
+    <footer class="note">
+      <p>本页仅供本人查阅，请勿转发链接。</p>
+      <p>岗位信息来自公开校招公告，投递前请以企业官方公告为准。</p>
+      <p id="foot"></p>
+    </footer>
+
   </div>
-
-  <main class="list" id="list"></main>
-
-  <footer class="note">
-    <p>本页仅供本人查阅，请勿转发链接。</p>
-    <p>岗位信息来自公开校招公告，投递前请以企业官方公告为准。</p>
-    <p id="foot"></p>
-  </footer>
-
 </div>
 <script src="assets/app.js"></script>
 </body>
